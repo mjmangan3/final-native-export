@@ -1,0 +1,1 @@
+java -cp "..\lib\*" com.vereview.MainApp dbName=case_14_3421 exportDir=C:\export\case_14_3421 env=PROD
