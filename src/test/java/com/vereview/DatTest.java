@@ -27,7 +27,7 @@ import java.util.Map;
 import java.util.Set;
 
 public class DatTest extends DaoTest {
-
+    /*
     @Test
     public void createDat() {
         try {
@@ -100,4 +100,6 @@ public class DatTest extends DaoTest {
             Assert.fail(ExceptionUtils.getStackTrace(t));
         }
     }
+
+     */
 }

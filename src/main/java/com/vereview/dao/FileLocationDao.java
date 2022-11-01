@@ -36,6 +36,23 @@ public class FileLocationDao {
         return locations;
     }
 
+    public Map<Long, FileLocation> fetchFileLocationsByTypeAndExportId(String type, Long exportId) throws SQLException{
+        Map<Long, FileLocation> locations = new HashMap<>();
+        try (Connection c = mgr.getDataSource().getConnection()){
+            PreparedStatement ps = c.prepareStatement("select * from file_location where type = ? and file_id in(select file_id from file_export where export_id = ?)");
+            ps.setString(1, type);
+            ps.setLong(2, exportId);
+            ResultSet r = ps.executeQuery();
+            while (r.next()){
+                FileLocation f = marshall(r);
+                locations.put(f.getFileId(), f);
+            }
+        }catch (SQLException se){
+            throw se;
+        }
+        return locations;
+    }
+
 
     public FileLocation marshall(ResultSet r) throws SQLException{
         FileLocation f = new FileLocation();

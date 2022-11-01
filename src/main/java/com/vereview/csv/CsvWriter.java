@@ -1,6 +1,7 @@
 package com.vereview.csv;
 
 import com.google.common.base.Strings;
+import jcifs.smb.SmbFile;
 import org.supercsv.io.CsvMapWriter;
 import org.supercsv.io.ICsvMapWriter;
 import org.supercsv.prefs.CsvPreference;

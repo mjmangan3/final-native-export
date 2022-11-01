@@ -66,6 +66,22 @@ public class PropertyDao {
         return p;
     }
 
+    public Map<Long, Property> findByExportId(Long exportId) throws SQLException{
+        Map<Long, Property> props = new HashMap<>();
+        try(Connection c = mgr.getDataSource().getConnection()){
+            PreparedStatement ps = c.prepareStatement("select * from property where file_id in(select file_id from file_export where export_id = ?)");
+            ps.setLong(1, exportId);
+            ResultSet r = ps.executeQuery();
+            while (r.next()){
+                Property p = marshall(r);
+                props.put(p.getFileId(), p);
+            }
+        }catch (SQLException se){
+            throw se;
+        }
+        return props;
+    }
+
     public Property marshall(ResultSet r) throws SQLException{
         Property p = new Property();
         p.setAuthor(r.getString("author"));

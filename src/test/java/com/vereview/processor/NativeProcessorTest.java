@@ -19,6 +19,7 @@ public class NativeProcessorTest {
     private IndexManager indexManager;
     private FileMessage message;
 
+    /*
     @Before
     public void setUp(){
         try {
@@ -54,4 +55,6 @@ public class NativeProcessorTest {
             Assert.fail(ExceptionUtils.getStackTrace(t));
         }
     }
+
+     */
 }

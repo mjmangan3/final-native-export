@@ -50,6 +50,23 @@ public class EmailDao {
         return e;
     }
 
+    public Map<Long, Email> fetchByExportId(Long exportId) throws SQLException{
+        Map<Long, Email> e = new HashMap<>();
+        try(Connection c = mgr.getDataSource().getConnection()){
+            PreparedStatement ps = c.prepareStatement("select * from email where file_id in(select file_id from file_export where export_id = ?)");
+            ps.setLong(1, exportId);
+            ResultSet r = ps.executeQuery();
+            while (r.next()){
+                Email email = marshall(r);
+                Long file_id = email.getFileId();
+                e.put(file_id, email);
+            }
+        }catch (SQLException se){
+            throw se;
+        }
+        return e;
+    }
+
     public Email marshall(ResultSet r) throws SQLException{
         Email e = new Email();
         e.setAttachmentCount(r.getLong("attachment_count"));

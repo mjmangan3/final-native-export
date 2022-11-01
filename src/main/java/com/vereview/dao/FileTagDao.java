@@ -52,6 +52,36 @@ public class FileTagDao {
         return fts;
     }
 
+    public Map<Long, Set<String>> getFileTagsByExportId(Long exportId) throws SQLException{
+        Map<Long, Set<String>> fts = new HashMap<>();
+        try (Connection c = mgr.getDataSource().getConnection()){
+            PreparedStatement ps = c.prepareStatement("select * from file_tag where file_id in(select file_id from file_export where export_id = ?)");
+            ps.setLong(1, exportId);
+            ResultSet r = ps.executeQuery();
+            while (r.next()){
+                FileTag f = marshall(r);
+                Set<String> v = null;
+                String name = indexManager.getTagByTagId().get(f.getTagId());;
+                if(!fts.containsKey(f.getFileId())){
+                    v = new HashSet<>();
+                    if(indexManager.getTagByTagId().containsKey(f.getTagId())) {
+                        v.add(name);
+                    }
+                    fts.put(f.getFileId(), v);
+                }else {
+                    v = fts.get(f.getFileId());
+                    if(!v.contains(name)){
+                        v.add(name);
+                        fts.replace(f.getFileId(), v);
+                    }
+                }
+            }
+        }catch (SQLException se){
+            throw se;
+        }
+        return fts;
+    }
+
     public Set<String> findFileTagsByFileId(Long fileId) throws SQLException {
         Set<String> v = new HashSet<>();
         try (Connection c = mgr.getDataSource().getConnection()){

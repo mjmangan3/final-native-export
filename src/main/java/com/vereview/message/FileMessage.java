@@ -1,5 +1,9 @@
 package com.vereview.message;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.vereview.model.Export;
+
 import java.nio.file.Path;
 import java.util.Map;
 
@@ -15,6 +19,7 @@ public class FileMessage implements Comparable<FileMessage>{
     private Path textExportFile;
     private Path redactedTextExportFile;
     private TextInfo textVeFiles;
+    private Export export;
 
 
     public Long getFileId() {
@@ -85,6 +90,14 @@ public class FileMessage implements Comparable<FileMessage>{
         return this.documentId.compareTo(other.getDocumentId());
     }
 
+    public Export getExport() {
+        return export;
+    }
+
+    public void setExport(Export export) {
+        this.export = export;
+    }
+
     @Override
     public String toString() {
         return "FileMessage{" +
@@ -97,5 +110,10 @@ public class FileMessage implements Comparable<FileMessage>{
                 ", redactedTextExportFile=" + redactedTextExportFile +
                 ", textVeFiles=" + textVeFiles +
                 '}';
+    }
+
+    public String toJson() throws JsonProcessingException {
+        ObjectMapper mapper = new ObjectMapper();
+        return mapper.writeValueAsString(this);
     }
 }
