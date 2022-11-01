@@ -36,6 +36,28 @@ public class IndexManager {
 
     }
 
+    public void clear() {
+        this.fileByFileId = null;
+        this.fileProductionByFileId = null;
+        this.folderByFolderId = null;
+        this.custodainByCustodianId = null;
+        this.documentNumbersByFileId = null;
+        this.emailByFileId = null;
+        this.propertyByFileId = null;
+        this.tagByTagId = null;
+        this.tagsByFileId = null;
+        this.bookmarkByBookmarkId = null;
+        this.bookmarksByFileId = null;
+        this.questionsByQuestionId = null;
+        this.responseByResponseId = null;
+        this.answersByFileId = null;
+        this.nativeFileLocationByFileId = null;
+        this.textFileLocationByFileId = null;
+        this.textPageInfosByFileId = null;
+        this.redactedTextPageInfosByFileId = null;
+        this.categoriesByCategoryId = null;
+    }
+
     public static IndexManager getInstance(){
         return instance;
     }

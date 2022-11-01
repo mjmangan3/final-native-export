@@ -15,7 +15,7 @@ import java.util.Map;
 public class QuestionBuilderTest extends BuilderTest{
     //255785, 255257, 225789
 
-
+/*
     @Test
     public void buildTest(){
         try {
@@ -34,4 +34,6 @@ public class QuestionBuilderTest extends BuilderTest{
             Assert.fail(ExceptionUtils.getStackTrace(t));
         }
     }
+
+ */
 }

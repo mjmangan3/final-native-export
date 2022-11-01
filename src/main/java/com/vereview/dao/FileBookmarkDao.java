@@ -52,6 +52,36 @@ public class FileBookmarkDao {
         return fts;
     }
 
+    public Map<Long, Set<String>> getFileBookmarksByExportId(Long exportId) throws SQLException{
+        Map<Long, Set<String>> fts = new HashMap<>();
+        try (Connection c = mgr.getDataSource().getConnection()){
+            PreparedStatement ps = c.prepareStatement("select * from file_bookmark where file_id in(select file_id from file_export where export_id = ?)");
+            ps.setLong(1, exportId);
+            ResultSet r = ps.executeQuery();
+            while (r.next()){
+                FileBookmark f = marshall(r);
+                Set<String> v = null;
+                String name = indexManager.getBookmarkByBookmarkId().get(f.getBookmarkId());
+                if(!fts.containsKey(f.getFileId())){
+                    v = new HashSet<>();
+                    if(indexManager.getBookmarkByBookmarkId().containsKey(f.getBookmarkId())) {
+                        v.add(name);
+                    }
+                    fts.put(f.getFileId(), v);
+                }else {
+                    v = fts.get(f.getFileId());
+                    if(!v.contains(name)){
+                        v.add(name);
+                        fts.replace(f.getFileId(), v);
+                    }
+                }
+            }
+        }catch (SQLException se){
+            throw se;
+        }
+        return fts;
+    }
+
     public Set<String> fetchBookmarksByFileId(Long fileId) throws SQLException {
         Set<String> b = new HashSet<>();
         try (Connection c = mgr.getDataSource().getConnection()){

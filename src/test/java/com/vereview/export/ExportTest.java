@@ -8,6 +8,7 @@ import org.junit.Test;
 
 public class ExportTest {
 
+    /*
     @Test
     public void copyNativeTest(){
         try {
@@ -18,4 +19,6 @@ public class ExportTest {
             Assert.fail(ExceptionUtils.getStackTrace(t));
         }
     }
+
+     */
 }

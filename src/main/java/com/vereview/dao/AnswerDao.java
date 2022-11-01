@@ -63,6 +63,46 @@ public class AnswerDao {
         return answers;
     }
 
+    public Map<Long, Map<Long, List<Answer>>> getAnswersByExportId(Long exportId) throws SQLException{
+        Map<Long, Map<Long, List<Answer>>> answers = new HashMap<>();
+        try (Connection c = mgr.getDataSource().getConnection()){
+            PreparedStatement ps = c.prepareStatement("select * from answer where file_id in(select file_id from file_export where export_id = ?)");
+            ps.setLong(1, exportId);
+            ResultSet r = ps.executeQuery();
+            while (r.next()){
+                Answer a = marshall(r);
+                Map<Long, List<Answer>> qa;
+                List<Answer> la;
+                if(!answers.containsKey(a.getFileId())){
+                    qa = new HashMap<>();
+                    la = new ArrayList<>();
+                    la.add(a);
+                    qa.put(a.getQuestionId(), la);
+                    answers.put(a.getFileId(), qa);
+                }else {
+                    qa = answers.get(a.getFileId());
+                    if(!qa.containsKey(a.getQuestionId())){
+                        la = new ArrayList<>();
+                        la.add(a);
+                        qa.put(a.getQuestionId(), la);
+                        answers.replace(a.getFileId(), qa);
+                    }else {
+                        la = qa.get(a.getQuestionId());
+                        la.add(a);
+                        qa.replace(a.getQuestionId(), la);
+                        answers.replace(a.getFileId(), qa);
+                    }
+
+                }
+
+            }
+
+        }catch (SQLException se){
+            throw se;
+        }
+        return answers;
+    }
+
     public Map<Long, List<Answer>> getAnswersByFileId(Long fileId) throws SQLException {
         Map<Long, List<Answer>> qa = null;
         try (Connection c = mgr.getDataSource().getConnection()){

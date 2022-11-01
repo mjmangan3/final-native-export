@@ -27,6 +27,7 @@ import java.util.Map;
  */
 public class FullTest{
 
+    /*
     @Test
     public void datCreationTest(){
         try {
@@ -92,5 +93,7 @@ public class FullTest{
             Assert.fail(ExceptionUtils.getStackTrace(t));
         }
     }
+
+     */
 
 }

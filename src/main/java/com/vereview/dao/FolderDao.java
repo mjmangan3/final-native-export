@@ -51,6 +51,23 @@ public class FolderDao {
         return f;
     }
 
+    public Map<Long, Folder> findByExportId(Long exportId) throws SQLException{
+        Map<Long, Folder> folders = new HashMap<>();
+        try (Connection c = mgr.getDataSource().getConnection()){
+            PreparedStatement ps = c.prepareStatement("select * from folder where folder_id in(select folder_id from [file] where file_id in(select file_id from file_export where export_id = ?))");
+            ps.setLong(1, exportId);
+            ResultSet r = ps.executeQuery();
+            while (r.next()){
+                Folder f = marshall(r);
+                Long folderId = f.getFolderId();
+                folders.put(folderId, f);
+            }
+        }catch (SQLException se){
+            throw se;
+        }
+        return folders;
+    }
+
     public Folder marshall(ResultSet r) throws SQLException{
         Folder f = new Folder();
         f.setDeviceId(r.getLong("device_id"));

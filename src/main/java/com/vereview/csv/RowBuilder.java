@@ -50,97 +50,127 @@ public class RowBuilder extends Builder{
     }
 
     public RowBuilder category(){
-        String category = file.getCategoryId()==null?"":indexManager.getCategoriesByCategoryId().get(file.getCategoryId());
-        this.row.put(StandardColumnNames.CATEGORY.getColumnName(), category);
+        if (file != null && file.getCategoryId() != null) {
+            String category = file.getCategoryId() == null ? "" : indexManager.getCategoriesByCategoryId().get(file.getCategoryId());
+            this.row.put(StandardColumnNames.CATEGORY.getColumnName(), category);
+        }
         return this;
     }
 
     public RowBuilder documentId(){
-        assert (file.getNumber() != null && !file.getNumber().isEmpty());
-        this.row.put(StandardColumnNames.DOCUMENT_ID.getColumnName(), FileUtils.removeIllegalFileSystemCharacters(processNull(file.getNumber())));
+        if (file != null && file.getNumber() != null && !file.getNumber().isEmpty()) {
+            this.row.put(StandardColumnNames.DOCUMENT_ID.getColumnName(), FileUtils.removeIllegalFileSystemCharacters(processNull(file.getNumber())));
+        }
         return this;
     }
 
     public RowBuilder familyId(){
-        File family = indexManager.getFileByFileId().get(file.getFamilyId());
-
-        this.row.put(StandardColumnNames.FAMILY_ID.getColumnName(), processNull(family!=null?family.getNumber():""));
+        if (file != null && file.getFamilyId() != null) {
+            File family = indexManager.getFileByFileId().get(file.getFamilyId());
+            this.row.put(StandardColumnNames.FAMILY_ID.getColumnName(), processNull(family != null ? family.getNumber() : ""));
+        }
         return this;
     }
 
 
     public RowBuilder custodian(){
-        this.custodian = indexManager.getCustodainByCustodianId().get(indexManager.getFileByFileId().get(fileId).getCustodianId());
+        if (file != null && file.getCustodianId() != null) {
+            this.custodian = indexManager.getCustodainByCustodianId().get(file.getCustodianId());
+        }
         return this;
     }
 
     public RowBuilder folder(){
-        Folder f = indexManager.getFolderByFolderId().get(indexManager.getFileByFileId().get(fileId).getFolderId());
-        if(f != null) {
-            this.folder = f.getFullName();
+        if (file != null && file.getFolderId() != null) {
+            Folder f = indexManager.getFolderByFolderId().get(file.getFolderId());
+            if (f != null) {
+                this.folder = f.getFullName();
+            }
         }
         return this;
     }
 
     public RowBuilder fileName(){
-        this.name = indexManager.getFileByFileId().get(fileId).getName();
+        if (file != null && file.getName() != null && !file.getName().isEmpty()) {
+            this.name = file.getName();
+        }
         return this;
     }
 
     public RowBuilder extension(){
-        this.extension = indexManager.getFileByFileId().get(fileId).getExtension();
+        if (file != null && file.getName() != null && !file.getName().isEmpty()) {
+            this.extension = file.getExtension();
+        }
         return this;
     }
 
     public RowBuilder parentId(){
-        Long id = file.getParentId();
-        String pNum = id==null?"":indexManager.getFileByFileId().get(id).getNumber();
-        this.row.put(StandardColumnNames.PARENT_ID.getColumnName(), processNull(pNum));
+        if (file != null && file.getParentId() != null) {
+            Long id = file.getParentId();
+            String pNum = id == null ? "" : indexManager.getFileByFileId().get(id).getNumber();
+            this.row.put(StandardColumnNames.PARENT_ID.getColumnName(), processNull(pNum));
+        }
         return this;
     }
 
     public RowBuilder dateCreated(){
-        dateCreated = DateUtils.getDateString(indexManager.getFileByFileId().get(fileId).getDateCreated());
+        if (file != null && file.getDateCreated() != null) {
+            dateCreated = DateUtils.getDateString(file.getDateCreated());
+        }
         return this;
     }
 
     public RowBuilder dateModified(){
-        dateModified = DateUtils.getDateString(indexManager.getFileByFileId().get(fileId).getDateModified());
+        if (file != null && file.getDateModified() != null) {
+            dateModified = DateUtils.getDateString(file.getDateModified());
+        }
         return this;
     }
 
     public RowBuilder eSha1Hash(){
-        eSha1Hash = file.getEsha1Hash();
+        if (file != null && file.getEsha1Hash() != null && !file.getEsha1Hash().isEmpty()) {
+            eSha1Hash = file.getEsha1Hash();
+        }
         return this;
     }
 
     public RowBuilder dateAccessed(){
-        dateAccessed = DateUtils.getDateString(file.getDateAccessed());
+        if (file != null && file.getDateAccessed() != null) {
+            dateAccessed = DateUtils.getDateString(file.getDateAccessed());
+        }
         return this;
     }
 
     public RowBuilder application(){
-        application = file.getApplication();
+        if (file != null && file.getApplication() != null) {
+            application = file.getApplication();
+        }
         return this;
     }
 
     public RowBuilder docDate(){
-        docDate = DateUtils.getDateString(file.getDocDate());
+        if (file != null && file.getDocDate() != null) {
+            docDate = DateUtils.getDateString(file.getDocDate());
+        }
         return this;
     }
 
     public RowBuilder size(){
-        fileSize = String.valueOf(file.getSize());
+        if (file != null && file.getSize() != null) {
+            fileSize = String.valueOf(file.getSize());
+        }
         return this;
     }
 
     public RowBuilder hotDoc(){
-        hotDoc = file.getHotDoc()?"YES":"NO";
+        hotDoc = file != null && file.getHotDoc()?"YES":"NO";
         return this;
     }
 
     public RowBuilder eMd5Hash(){
-        eMd5Hash = file.getEmd5Hash();
+        if (file != null && file.getEmd5Hash() != null) {
+            eMd5Hash = file.getEmd5Hash();
+        }
         return this;
     }
 

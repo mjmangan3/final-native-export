@@ -81,6 +81,24 @@ public class FileDao {
         return files;
     }
 
+    public Map<Long, File> findAllByExportId(Long exportId) throws SQLException{
+        Map<Long, File> files = new HashMap<>();
+        try (Connection c = mgr.getDataSource().getConnection()){
+            PreparedStatement ps = c.prepareStatement("select * from [file] where file_id in(select file_id from file_export where export_id = ?) or file_id in(select parent_id from [file] where file_id in(select file_id from file_export where export_id = ?)) or file_id in(select family_id from [file] where file_id in(select file_id from file_export where export_id = ?))");
+            ps.setLong(1, exportId);
+            ps.setLong(2, exportId);
+            ps.setLong(3, exportId);
+            ResultSet r = ps.executeQuery();
+            while (r.next()){
+                File f = marshall(r);
+                files.put(f.getFileId(), f);
+            }
+        }catch (SQLException se){
+            throw se;
+        }
+        return files;
+    }
+
     public File marshall(ResultSet r) throws SQLException{
         File f = new File();
         f.setApplication(r.getString("application"));

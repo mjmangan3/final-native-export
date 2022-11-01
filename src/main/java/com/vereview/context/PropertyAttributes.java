@@ -7,7 +7,12 @@ public enum PropertyAttributes {
     DB_USERNAME("db_username"),
     DB_PASSWORD("db_password"),
     DB_INSTANCE("db_instance"),
-    DB_SERVER("db_server");
+    DB_SERVER("db_server"),
+    STORAGE_USERNAME("storage_username"),
+    STORAGE_PASSWORD("storage_password"),
+    THREAD_COUNT("thread_count"),
+    EXPORT_PATH_USERNAME("export_path_username"),
+    EXPORT_PATH_PASSWORD("export_path_password");
 
     private String attribute;
 

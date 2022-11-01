@@ -46,6 +46,32 @@ public class PageInfoDao {
         return ret;
     }
 
+    public Map<Long, Map<Long, PageInfo>> getPageInfoByTypeAndExportId(PageLocationType type, Long exportId) throws  SQLException{
+        Map<Long, Map<Long, PageInfo>> ret = new HashMap<>();
+        try (Connection c = mgr.getDataSource().getConnection()){
+            PreparedStatement ps = c.prepareStatement("select p.file_id, p.number, pl.type, pl.location from page p join page_location pl on(p.page_id = pl.page_id) where pl.type = ? and p.file_id in(select file_id from file_export where export_id = ?)");
+            ps.setString(1, type.getType());
+            ps.setLong(2, exportId);
+            ResultSet r = ps.executeQuery();
+            while (r.next()){
+                PageInfo i = marshall(r);
+                Map<Long, PageInfo> pi = null;
+                if(!ret.containsKey(i.getFileId())){
+                    pi = new HashMap<>();
+                    pi.put(i.getPageNumber(), i);
+                    ret.put(i.getFileId(), pi);
+                }else {
+                    pi = ret.get(i.getFileId());
+                    pi.put(i.getPageNumber(), i);
+                    ret.replace(i.getFileId(), pi);
+                }
+            }
+        }catch (SQLException se){
+            throw se;
+        }
+        return ret;
+    }
+
     public PageInfo marshall(ResultSet r) throws SQLException{
         PageInfo p = new PageInfo();
         p.setFileId(r.getLong("file_id"));

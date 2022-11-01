@@ -19,6 +19,11 @@ public class ApplicationContext {
     private String dbInstance;
     private String dbServer;
     private String dbName;
+    private String storageUserName;
+    private String storagePassword;
+    private Integer threadCount;
+    private String exportPathUserName;
+    private String exportPathPassword;
 
     private ApplicationContext(){
 
@@ -37,6 +42,11 @@ public class ApplicationContext {
             this.dbServer = prop.getProperty(PropertyAttributes.DB_SERVER.getAttribute());
             this.dbUserName = prop.getProperty(PropertyAttributes.DB_USERNAME.getAttribute());
             this.dbName = dbName;
+            this.storageUserName = prop.getProperty(PropertyAttributes.STORAGE_USERNAME.getAttribute());
+            this.storagePassword = prop.getProperty(PropertyAttributes.STORAGE_PASSWORD.getAttribute());
+            this.threadCount = Integer.parseInt(prop.getProperty(PropertyAttributes.THREAD_COUNT.getAttribute()));
+            this.exportPathUserName = prop.getProperty(PropertyAttributes.EXPORT_PATH_USERNAME.getAttribute());
+            this.exportPathPassword = prop.getProperty(PropertyAttributes.EXPORT_PATH_PASSWORD.getAttribute());
         }catch (IOException ioe){
             throw new RuntimeException("failed to initialize application context", ioe);
         }
@@ -80,5 +90,45 @@ public class ApplicationContext {
 
     public void setDbName(String dbName) {
         this.dbName = dbName;
+    }
+
+    public String getStorageUserName() {
+        return storageUserName;
+    }
+
+    public void setStorageUserName(String storageUserName) {
+        this.storageUserName = storageUserName;
+    }
+
+    public String getStoragePassword() {
+        return storagePassword;
+    }
+
+    public void setStoragePassword(String storagePassword) {
+        this.storagePassword = storagePassword;
+    }
+
+    public Integer getThreadCount() {
+        return threadCount;
+    }
+
+    public void setThreadCount(Integer threadCount) {
+        this.threadCount = threadCount;
+    }
+
+    public String getExportPathUserName() {
+        return exportPathUserName;
+    }
+
+    public void setExportPathUserName(String exportPathUserName) {
+        this.exportPathUserName = exportPathUserName;
+    }
+
+    public String getExportPathPassword() {
+        return exportPathPassword;
+    }
+
+    public void setExportPathPassword(String exportPathPassword) {
+        this.exportPathPassword = exportPathPassword;
     }
 }
